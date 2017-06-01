@@ -3,12 +3,12 @@ function get_docker_tag {
   # if is PR set DOCKER_TAG to PR BRANCH NAME
   if [[ ${TRAVIS_PULL_REQUEST} != "false" ]]; then
     echo "$TRAVIS_PULL_REQUEST_BRANCH-$TRAVIS_PULL_REQUEST_SHA";
-    # return 0;
+    return 0;
   fi
   # if is not PR but has a git tag
   if [[ ${TRAVIS_PULL_REQUEST} == "false" && -n ${TRAVIS_TAG} ]]; then
     echo "$TRAVIS_TAG";
-    # return 0;
+    return 0;
   fi
 }
 
