@@ -47,3 +47,18 @@ function versionist_if_needed {
   fi
 }
 
+# Load Travis cache file into docker images, if available
+function cache_load {
+  if [ -f $DOCKER_CACHE_FILE ]; then
+    gunzip -c $DOCKER_CACHE_FILE | docker load || true;
+  fi
+}
+
+# Save docker images to Travis cache.
+# Note: This has to be called in "script", otherwise the cache is not saved by Travis
+function cache_save {
+  if [[ ${TRAVIS_PULL_REQUEST} == "false" ]]; then
+    mkdir -p $(dirname ${DOCKER_CACHE_FILE});
+    docker save $(docker history -q $IMAGE:$DOCKER_TAG | grep -v '<missing>') | gzip > ${DOCKER_CACHE_FILE};
+  fi
+}
