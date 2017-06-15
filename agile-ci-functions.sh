@@ -39,7 +39,6 @@ function docker_push_if_needed {
     docker push $DOCKER_IMAGE:$DOCKER_TAG;
   else
     echo "DOCKER_TAG & DOCKER_IMAGE is not set, aborting push to dockerhub"
-    return 0
   fi
 }
 
