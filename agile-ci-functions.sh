@@ -10,6 +10,11 @@ function get_docker_tag {
     echo "$TRAVIS_TAG";
     return 0;
   fi
+  if [[ ${TRAVIS_PULL_REQUEST} == "false" && -z ${TRAVIS_TAG} ]]; then
+    echo "$TRAVIS_BRANCH";
+    return 0;
+  fi
+
 }
 
 function bootstrap {
