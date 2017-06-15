@@ -46,6 +46,11 @@ function docker_push_if_needed {
   if [[ -n ${DOCKER_TAG} && ${DOCKER_IMAGE} ]]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker push $DOCKER_IMAGE:$DOCKER_TAG;
+    #push master as latest
+    if [ "$DOCKER_TAG" == "master" ]; then
+      docker tag $DOCKER_IMAGE:$DOCKER_TAG $DOCKER_IMAGE;
+      docker push $DOCKER_IMAGE;
+    fi
   else
     echo "DOCKER_TAG & DOCKER_IMAGE is not set, aborting push to dockerhub"
   fi
