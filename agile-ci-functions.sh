@@ -25,11 +25,12 @@ function bootstrap {
   git config --global user.name "Agile CI Bot" && git config --global user.email "bot@http://agile-iot.eu/"
   docker run --rm --privileged multiarch/qemu-user-static:register
   if [ "$BASEIMAGE" ] ; then sed -i "s/^FROM .*/FROM $BASEIMAGE/" Dockerfile ; fi
-  if [ -f "package.json" ]; then
-  	echo "contains package.json - expect dependencies to be installed"
-  else
-    npm i git://github.com/resin-io/versionist.git#agile versionist-plugins;
-  fi
+  if [ "$VERSIONIST" == "true"]
+    if [ -f "package.json" ]; then
+      echo "contains package.json - expect dependencies to be installed"
+    else
+      npm i git://github.com/resin-io/versionist.git#agile versionist-plugins;
+    fi
 }
 
 # If a docker tag and image is present let's push it to dockerhub
