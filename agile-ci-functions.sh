@@ -44,7 +44,7 @@ function docker_push_if_needed {
 
 # If is on master and doesn't have tag and it's instructed by the versionist envar then run versionist
 function versionist_if_needed {
-  if [[ ${TRAVIS_PULL_REQUEST} == "false" && ${TRAVIS_BRANCH} == "master" && -z ${TRAVIS_TAG} && VERSIONIST ]]; then
+  if [[ ${TRAVIS_PULL_REQUEST} == "false" && ${TRAVIS_BRANCH} == "master" && -z ${TRAVIS_TAG} && "$VERSIONIST" == "true" ]]; then
     git checkout master;
     git remote set-url origin https://$GH_TOKEN@github.com/agile-iot/$COMPONENT.git;
     versionist;
