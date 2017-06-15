@@ -65,6 +65,6 @@ function cache_load {
 function cache_save {
   if [[ ${TRAVIS_PULL_REQUEST} == "false" ]]; then
     mkdir -p $(dirname ${DOCKER_CACHE_FILE});
-    docker save $(docker history -q $IMAGE:$DOCKER_TAG | grep -v '<missing>') | gzip > ${DOCKER_CACHE_FILE};
+    docker save $(docker history -q $DOCKER_IMAGE:$DOCKER_TAG | grep -v '<missing>') | gzip > ${DOCKER_CACHE_FILE};
   fi
 }
