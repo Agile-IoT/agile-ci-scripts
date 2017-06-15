@@ -34,6 +34,11 @@ function bootstrap {
   fi
 }
 
+function docker_upgrade {
+  wget https://download.docker.com/linux/ubuntu/dists/trusty/pool/test/amd64/docker-ce_17.05.0~ce~rc3-0~ubuntu-trusty_amd64.deb
+  sudo dpkg -i --force-confnew docker-ce_17.05.0~ce~rc3-0~ubuntu-trusty_amd64.deb
+}
+
 # build docker image
 function docker_build_if_needed {
   if [[ -n ${DOCKER_TAG} ]]; then
