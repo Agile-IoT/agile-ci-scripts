@@ -34,6 +34,13 @@ function bootstrap {
   fi
 }
 
+# build docker image
+function docker_build_if_needed {
+  if [[ -n ${DOCKER_TAG} ]]; then
+    docker build -t $DOCKER_IMAGE:$DOCKER_TAG .;
+  fi
+}
+
 # If a docker tag and image is present let's push it to dockerhub
 function docker_push_if_needed {
   if [[ -n ${DOCKER_TAG} && ${DOCKER_IMAGE} ]]; then
