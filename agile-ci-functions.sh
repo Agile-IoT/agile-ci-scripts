@@ -72,7 +72,7 @@ function versionist_if_needed {
 
 # Load Travis cache file into docker images, if available
 function cache_load {
-  if [ -f $DOCKER_CACHE_FILE ]; then
+  if [ -f "$DOCKER_CACHE_FILE" ]; then
     gunzip -c $DOCKER_CACHE_FILE | docker load || true;
   fi
 }
