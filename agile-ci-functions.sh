@@ -29,7 +29,7 @@ function bootstrap {
     if [ -f "package.json" ]; then
       echo "contains package.json - expect dependencies to be installed"
     else
-      npm i git://github.com/resin-io/versionist.git#agile versionist-plugins;
+      npm i versionist versionist-plugins;
     fi
   fi
 }
