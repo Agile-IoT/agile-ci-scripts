@@ -1,6 +1,6 @@
 # Agile-ci-scripts
 
-> a couple scripts to help with travis builds
+> a couple of shell functions to help with travis builds
 
 Requirements:
 
