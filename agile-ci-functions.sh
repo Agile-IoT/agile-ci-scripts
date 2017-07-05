@@ -24,7 +24,6 @@ function bootstrap {
   git fetch --tags
   git config --global user.name "Agile CI Bot" && git config --global user.email "bot@http://agile-iot.eu/"
   docker run --rm --privileged multiarch/qemu-user-static:register
-  if [ "$BASEIMAGE" ] ; then sed -i "s/^FROM .*/FROM $BASEIMAGE/" Dockerfile ; fi
   if [ "$VERSIONIST" == "true" ]; then
     if [ -f "package.json" ]; then
       echo "contains package.json - expect dependencies to be installed"
@@ -42,6 +41,7 @@ function docker_upgrade {
 # build docker image
 function docker_build_if_needed {
   if [[ -n ${DOCKER_TAG} ]]; then
+    if [ "$BASEIMAGE" ] ; then sed -i "s/^FROM .*/FROM $BASEIMAGE/" Dockerfile ; fi
     if [[ -n ${BASEIMAGE_BUILD} ]]; then
       DOCKER_BUILD_ARGS+=" --build-arg BASEIMAGE_BUILD=$BASEIMAGE_BUILD"
     fi
@@ -49,6 +49,7 @@ function docker_build_if_needed {
       DOCKER_BUILD_ARGS+=" --build-arg BASEIMAGE_DEPLOY=$BASEIMAGE_DEPLOY"
     fi
     docker build $DOCKER_BUILD_ARGS -t $DOCKER_IMAGE:$DOCKER_TAG .;
+    git checkout Dockerfile
   fi
 }
 
