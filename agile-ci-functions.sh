@@ -52,7 +52,13 @@ function docker_upgrade {
 function docker_build_if_needed {
   if [[ -n ${DOCKER_TAG} ]]; then
     if [ "$BASEIMAGE" ] ; then sed -i "s/^FROM .*/FROM $BASEIMAGE/" Dockerfile ; fi
-    docker build -t $DOCKER_IMAGE:$DOCKER_TAG .;
+    if [[ -n ${BASEIMAGE_BUILD} ]]; then
+      DOCKER_BUILD_ARGS+=" --build-arg BASEIMAGE_BUILD=$BASEIMAGE_BUILD"
+    fi
+    if [[ -n ${BASEIMAGE_DEPLOY} ]]; then
+      DOCKER_BUILD_ARGS+=" --build-arg BASEIMAGE_DEPLOY=$BASEIMAGE_DEPLOY"
+    fi
+    docker build $DOCKER_BUILD_ARGS -t $DOCKER_IMAGE:$DOCKER_TAG .;
     git checkout Dockerfile
   fi
 }
