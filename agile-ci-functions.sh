@@ -43,13 +43,15 @@ bootstrap () {
   fi
 }
 
-docker_upgrade () {
+docker_upgrade () (
+  set -e
   wget https://download.docker.com/linux/ubuntu/dists/trusty/pool/test/amd64/docker-ce_17.05.0~ce~rc3-0~ubuntu-trusty_amd64.deb
   sudo dpkg -i --force-confnew docker-ce_17.05.0~ce~rc3-0~ubuntu-trusty_amd64.deb
-}
+)
 
 # build docker image
-docker_build_if_needed () {
+docker_build_if_needed () (
+  set -e
   if [[ -n ${DOCKER_TAG} ]]; then
     if [ "$BASEIMAGE" ] ; then sed -i "s/^FROM .*/FROM $BASEIMAGE/" Dockerfile ; fi
     if [[ -n ${BASEIMAGE_BUILD} ]]; then
@@ -58,13 +60,14 @@ docker_build_if_needed () {
     if [[ -n ${BASEIMAGE_DEPLOY} ]]; then
       DOCKER_BUILD_ARGS+=" --build-arg BASEIMAGE_DEPLOY=$BASEIMAGE_DEPLOY"
     fi
-    docker build $DOCKER_BUILD_ARGS -t $DOCKER_IMAGE:$DOCKER_TAG . || return 1
+    docker build $DOCKER_BUILD_ARGS -t $DOCKER_IMAGE:$DOCKER_TAG .
     git checkout Dockerfile
   fi
-}
+)
 
 # If a docker tag and image is present let's push it to dockerhub
-docker_push_if_needed () {
+docker_push_if_needed () (
+  set -e
   if [[ -n ${DOCKER_TAG} && ${DOCKER_IMAGE} ]]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker push $DOCKER_IMAGE:$DOCKER_TAG;
@@ -76,16 +79,17 @@ docker_push_if_needed () {
   else
     echo "DOCKER_TAG & DOCKER_IMAGE is not set, aborting push to dockerhub"
   fi
-}
+)
 
 # If is on master and doesn't have tag and it's instructed by the versionist envar then run versionist
-versionist_if_needed () {
+versionist_if_needed () (
+  set -e
   if [[ ${TRAVIS_PULL_REQUEST} == "false" && ${TRAVIS_BRANCH} == "master" && -z ${TRAVIS_TAG} && "$VERSIONIST" == "true" ]]; then
     git checkout master;
     git remote set-url origin https://$GH_TOKEN@github.com/agile-iot/$COMPONENT.git;
     versionist;
   fi
-}
+)
 
 # Load Travis cache file into docker images, if available
 cache_load () {
