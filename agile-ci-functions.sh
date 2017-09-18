@@ -58,7 +58,7 @@ function docker_build_if_needed {
     if [[ -n ${BASEIMAGE_DEPLOY} ]]; then
       DOCKER_BUILD_ARGS+=" --build-arg BASEIMAGE_DEPLOY=$BASEIMAGE_DEPLOY"
     fi
-    docker build $DOCKER_BUILD_ARGS -t $DOCKER_IMAGE:$DOCKER_TAG .;
+    docker build $DOCKER_BUILD_ARGS -t $DOCKER_IMAGE:$DOCKER_TAG . || return 1
     git checkout Dockerfile
   fi
 }
