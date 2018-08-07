@@ -61,6 +61,10 @@ docker_build_if_needed () (
     if [[ -n ${BASEIMAGE_DEPLOY} ]]; then
       DOCKER_BUILD_ARGS+=" --build-arg BASEIMAGE_DEPLOY=$BASEIMAGE_DEPLOY"
     fi
+    # workaround for building ARM images containing Java code in emulation
+    if [[ -n ${QEMU_ARM_JAVA_WORKAROUND} ]]; then
+      DOCKER_BUILD_ARGS+=" --cpuset-cpus 0"
+    fi
     docker build $DOCKER_BUILD_ARGS -t $DOCKER_IMAGE:$DOCKER_TAG .
     git checkout Dockerfile
   fi
